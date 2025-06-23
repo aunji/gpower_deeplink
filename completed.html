@@ -2,63 +2,43 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>กำลังกลับเข้าแอป GPower...</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      body {
-        font-family: sans-serif;
-        text-align: center;
-        padding: 60px 20px;
-      }
-      #fallback {
-        display: none;
-        margin-top: 40px;
-        color: #555;
-      }
-      a.button {
-        display: inline-block;
-        padding: 12px 24px;
-        background-color: #1e88e5;
-        color: white;
-        font-size: 16px;
-        border-radius: 6px;
-        text-decoration: none;
-        margin-top: 12px;
-      }
-    </style>
+    <title>เปิดแอป GPower...</title>
     <script>
       window.onload = function () {
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get("redirect");
         if (redirect) {
           const decoded = decodeURIComponent(redirect);
-          console.log("[🧭 Redirecting to app]:", decoded);
+          console.log("[Redirect]:", decoded);
 
-          // ลองเปิดลิงก์ deep link ทันที
-          window.location.href = decoded;
-
-          // ถ้าไม่สำเร็จใน 3 วิ แสดง fallback
           setTimeout(() => {
             document.getElementById("fallback").style.display = "block";
             document.getElementById("manualLink").href = decoded;
           }, 3000);
-        } else {
-          document.getElementById("fallback").innerHTML =
-            "ไม่พบลิงก์ redirect 😢";
-          document.getElementById("fallback").style.display = "block";
+
+          window.location.href = decoded;
         }
       };
     </script>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 100px;
+      }
+      #fallback {
+        display: none;
+        margin-top: 40px;
+        color: gray;
+      }
+    </style>
   </head>
   <body>
     <h1>กำลังเปิดแอป GPower...</h1>
-    <p>กรุณารอสักครู่ เพื่อกลับเข้าสู่แอป</p>
-
+    <p>กรุณารอสักครู่</p>
     <div id="fallback">
-      <p>
-        หากแอปไม่เปิดอัตโนมัติ<br />กรุณากดปุ่มด้านล่างเพื่อเปิดแอปด้วยตนเอง
-      </p>
-      <a id="manualLink" class="button" href="#">เปิดแอป GPower</a>
+      <p>หากแอปไม่เปิดอัตโนมัติ <br />กรุณากดปุ่มด้านล่าง:</p>
+      <a id="manualLink" href="#">เปิดแอปด้วยตนเอง</a>
     </div>
   </body>
 </html>
