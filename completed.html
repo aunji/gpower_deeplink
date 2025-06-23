@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting to GPower App...</title>
+    <script>
+      window.onload = function () {
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get("redirect");
+        if (redirect) {
+          const decoded = decodeURIComponent(redirect);
+          console.log("[Redirect]:", decoded);
+
+          // Show fallback message in case redirect fails
+          setTimeout(() => {
+            document.getElementById("fallback").style.display = "block";
+          }, 3000);
+
+          window.location.href = decoded;
+        }
+      };
+    </script>
+    <style>
+      body {
+        font-family: sans-serif;
+        text-align: center;
+        margin-top: 100px;
+      }
+      #fallback {
+        display: none;
+        margin-top: 40px;
+        color: gray;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>กำลังเปิดแอป GPower...</h1>
+    <p>กรุณารอสักครู่</p>
+    <div id="fallback">
+      <p>หากแอปไม่เปิดอัตโนมัติ <br />กรุณากดปุ่มด้านล่าง:</p>
+      <a id="manualLink" href="#">เปิดแอปด้วยตนเอง</a>
+    </div>
+  </body>
+</html>
