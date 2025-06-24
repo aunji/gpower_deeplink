@@ -1,70 +1,25 @@
+<!-- completed.html -->
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>กำลังเปิดแอป GPower...</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      body {
-        font-family: sans-serif;
-        text-align: center;
-        padding: 60px 20px;
-      }
-      #fallback {
-        display: none;
-        margin-top: 40px;
-        color: #555;
-      }
-      a.button {
-        display: inline-block;
-        padding: 12px 24px;
-        background-color: #1e88e5;
-        color: white;
-        font-size: 16px;
-        border-radius: 6px;
-        text-decoration: none;
-        margin-top: 12px;
-      }
-    </style>
+    <title>Redirecting...</title>
     <script>
       window.onload = function () {
-        const params = new URLSearchParams(window.location.search);
-        const redirect = params.get("redirect");
-
-        if (!redirect) {
-          document.getElementById("fallback").innerHTML =
-            "ไม่พบลิงก์สำหรับเปิดแอป";
-          document.getElementById("fallback").style.display = "block";
-          return;
+        const redirect = new URLSearchParams(window.location.search).get(
+          "redirect"
+        );
+        if (redirect) {
+          const decoded = decodeURIComponent(redirect);
+          console.log("Redirecting to app:", decoded);
+          window.location.href = decoded;
+        } else {
+          document.body.innerHTML = "<h2>No redirect URL found.</h2>";
         }
-
-        const decoded = decodeURIComponent(redirect);
-        console.log("[DeepLink] Try opening:", decoded);
-
-        // วิธี 1: ลอง iframe (ดีสุดบน Android)
-        const iframe = document.createElement("iframe");
-        iframe.style.display = "none";
-        iframe.src = decoded;
-        document.body.appendChild(iframe);
-
-        // วิธี 2: iOS อาจต้องใช้ fallback
-        setTimeout(() => {
-          document.getElementById("fallback").style.display = "block";
-          document.getElementById("manualLink").href = decoded;
-        }, 2000);
       };
     </script>
   </head>
   <body>
-    <h1>กำลังเปิดแอป GPower...</h1>
-    <p>กรุณารอสักครู่ เพื่อกลับเข้าสู่แอป</p>
-
-    <div id="fallback">
-      <p>
-        หากแอปไม่เปิดอัตโนมัติ<br />
-        กรุณากดปุ่มด้านล่างเพื่อเปิดแอปด้วยตนเอง
-      </p>
-      <a id="manualLink" class="button" href="#">เปิดแอป GPower</a>
-    </div>
+    <h2>Redirecting to app...</h2>
   </body>
 </html>
