@@ -2,105 +2,43 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>กำลังเปิดแอป GPower...</title>
+    <title>เปิดแอป GPower...</title>
+    <script>
+      window.onload = function () {
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get("redirect");
+        if (redirect) {
+          const decoded = decodeURIComponent(redirect);
+          console.log("[Redirect]:", decoded);
+
+          setTimeout(() => {
+            document.getElementById("fallback").style.display = "block";
+            document.getElementById("manualLink").href = decoded;
+          }, 3000);
+
+          window.location.href = decoded;
+        }
+      };
+    </script>
     <style>
       body {
-        font-family: Arial, sans-serif;
+        font-family: sans-serif;
         text-align: center;
-        padding: 50px 20px;
-        background-color: #f5f5f5;
-        color: #333;
-        margin: 0;
-      }
-      .container {
-        max-width: 400px;
-        margin: 0 auto;
-      }
-      h1 {
-        color: #1e88e5;
-        font-size: 24px;
-        margin-bottom: 20px;
-      }
-      .loading {
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 30px;
+        margin-top: 100px;
       }
       #fallback {
         display: none;
-      }
-      .fallback-text {
-        font-size: 16px;
-        color: #666;
-        margin-bottom: 20px;
-      }
-      .btn {
-        display: inline-block;
-        padding: 15px 30px;
-        background-color: #1e88e5;
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-size: 18px;
-        font-weight: bold;
-        border: none;
-        cursor: pointer;
-      }
-      .btn:hover {
-        background-color: #1976d2;
+        margin-top: 40px;
+        color: gray;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <h1>กำลังเปิดแอป GPower...</h1>
-      <div class="loading">กรุณารอสักครู่</div>
-      
-      <div id="fallback">
-        <div class="fallback-text">หากแอปไม่เปิดอัตโนมัติ กรุณากดปุ่มด้านล่าง</div>
-        <a id="manualBtn" href="#" class="btn">เปิดแอป GPower</a>
-      </div>
+    <h1>กำลังเปิดแอป GPower...</h1>
+    <p>กรุณารอสักครู่</p>
+    <div id="fallback">
+      <p>หากแอปไม่เปิดอัตโนมัติ <br />กรุณากดปุ่มด้านล่าง:</p>
+      <a id="manualLink" href="#">เปิดแอปด้วยตนเอง</a>
     </div>
-
-    <script>
-      (function() {
-        console.log('[GPower] Page loaded');
-        
-        const params = new URLSearchParams(window.location.search);
-        const redirectParam = params.get('redirect');
-        
-        console.log('[GPower] Redirect param:', redirectParam);
-        
-        if (redirectParam) {
-          const decoded = decodeURIComponent(redirectParam);
-          console.log('[GPower] Decoded URL:', decoded);
-          
-          // Set fallback button
-          document.getElementById('manualBtn').href = decoded;
-          
-          // Try redirect immediately
-          console.log('[GPower] Attempting window.location.href redirect');
-          window.location.href = decoded;
-          
-          // Backup method
-          setTimeout(function() {
-            console.log('[GPower] Attempting window.open redirect');
-            window.open(decoded, '_self');
-          }, 100);
-          
-          // Show fallback after 1 second
-          setTimeout(function() {
-            console.log('[GPower] Showing fallback button');
-            document.getElementById('fallback').style.display = 'block';
-          }, 1000);
-          
-        } else {
-          console.log('[GPower] No redirect parameter found');
-          document.getElementById('fallback').style.display = 'block';
-          document.querySelector('.fallback-text').textContent = 'ไม่พบลิงก์สำหรับเปิดแอป';
-        }
-      })();
-    </script>
   </body>
 </html>
