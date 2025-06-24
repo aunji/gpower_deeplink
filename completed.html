@@ -2,21 +2,31 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>เปิดแอป GPower...</title>
+    <title>กำลังเปิดแอป GPower...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       window.onload = function () {
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get("redirect");
+
         if (redirect) {
           const decoded = decodeURIComponent(redirect);
           console.log("[Redirect]:", decoded);
+          document.getElementById("manualLink").href = decoded;
 
+          // Auto redirect
+          setTimeout(() => {
+            window.location.href = decoded;
+          }, 300);
+
+          // Fallback UI after delay
           setTimeout(() => {
             document.getElementById("fallback").style.display = "block";
-            document.getElementById("manualLink").href = decoded;
           }, 3000);
-
-          window.location.href = decoded;
+        } else {
+          document.getElementById("fallback").innerHTML =
+            "ไม่พบลิงก์สำหรับเปิดแอป";
+          document.getElementById("fallback").style.display = "block";
         }
       };
     </script>
@@ -24,20 +34,34 @@
       body {
         font-family: sans-serif;
         text-align: center;
-        margin-top: 100px;
+        padding-top: 100px;
+        background-color: #f7f7f7;
+        color: #333;
+      }
+      h1 {
+        color: #1e88e5;
       }
       #fallback {
         display: none;
         margin-top: 40px;
-        color: gray;
+      }
+      a#manualLink {
+        display: inline-block;
+        padding: 12px 24px;
+        background-color: #1e88e5;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 16px;
       }
     </style>
   </head>
   <body>
     <h1>กำลังเปิดแอป GPower...</h1>
     <p>กรุณารอสักครู่</p>
+
     <div id="fallback">
-      <p>หากแอปไม่เปิดอัตโนมัติ <br />กรุณากดปุ่มด้านล่าง:</p>
+      <p>หากแอปไม่เปิดอัตโนมัติ<br />กรุณากดปุ่มด้านล่าง:</p>
       <a id="manualLink" href="#">เปิดแอปด้วยตนเอง</a>
     </div>
   </body>
