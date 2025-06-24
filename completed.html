@@ -44,21 +44,41 @@
         const params = new URLSearchParams(window.location.search);
         const redirectParam = params.get("redirect");
 
+        console.log("[DeepLink] Query params:", window.location.search);
+        console.log("[DeepLink] Redirect param:", redirectParam);
+
         if (redirectParam) {
           const decoded = decodeURIComponent(redirectParam);
-          console.log("[DeepLink] Redirecting to:", decoded);
+          console.log("[DeepLink] Decoded URL:", decoded);
 
-          // set manual fallback link
+          // Set manual fallback link
           document.getElementById("manualLink").href = decoded;
 
-          // auto redirect to deep link
-          window.location.replace(decoded);
+          // Try multiple redirect methods for better compatibility
+          try {
+            // Method 1: Direct assignment (most reliable for deep links)
+            window.location.href = decoded;
+            console.log("[DeepLink] Attempted redirect with location.href");
+          } catch (e) {
+            console.error("[DeepLink] Error with location.href:", e);
+            
+            // Method 2: Try window.open as fallback
+            try {
+              window.open(decoded, '_self');
+              console.log("[DeepLink] Attempted redirect with window.open");
+            } catch (e2) {
+              console.error("[DeepLink] Error with window.open:", e2);
+            }
+          }
 
-          // show fallback in case auto-redirect fails
+          // Show fallback after 2 seconds if redirect doesn't work
           setTimeout(() => {
+            console.log("[DeepLink] Showing fallback button");
             document.getElementById("fallback").style.display = "block";
-          }, 3000);
+          }, 2000);
+
         } else {
+          console.log("[DeepLink] No redirect parameter found");
           document.getElementById("fallback").innerHTML =
             "ไม่พบลิงก์สำหรับเปิดแอป";
           document.getElementById("fallback").style.display = "block";
