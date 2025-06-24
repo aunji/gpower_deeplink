@@ -2,86 +2,103 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>กำลังเปิดแอป GPower...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>กำลังเปิดแอป GPower...</title>
     <style>
       body {
-        font-family: sans-serif;
+        font-family: Arial, sans-serif;
         text-align: center;
-        padding-top: 100px;
-        background-color: #f7f7f7;
+        padding: 50px 20px;
+        background-color: #f5f5f5;
         color: #333;
+        margin: 0;
+      }
+      .container {
+        max-width: 400px;
+        margin: 0 auto;
       }
       h1 {
         color: #1e88e5;
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+      .loading {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 30px;
       }
       #fallback {
         display: none;
-        margin-top: 40px;
       }
-      a#manualLink {
+      .fallback-text {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 20px;
+      }
+      .btn {
         display: inline-block;
-        padding: 12px 24px;
+        padding: 15px 30px;
         background-color: #1e88e5;
         color: white;
         text-decoration: none;
-        border-radius: 6px;
-        font-size: 16px;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        cursor: pointer;
+      }
+      .btn:hover {
+        background-color: #1976d2;
       }
     </style>
   </head>
   <body>
-    <h1>กำลังเปิดแอป GPower...</h1>
-    <p>กรุณารอสักครู่</p>
-
-    <div id="fallback">
-      <p>หากแอปไม่เปิดอัตโนมัติ<br />กรุณากดปุ่มด้านล่าง:</p>
-      <a id="manualLink" href="#">เปิดแอปด้วยตนเอง</a>
+    <div class="container">
+      <h1>กำลังเปิดแอป GPower...</h1>
+      <div class="loading">กรุณารอสักครู่</div>
+      
+      <div id="fallback">
+        <div class="fallback-text">หากแอปไม่เปิดอัตโนมัติ กรุณากดปุ่มด้านล่าง</div>
+        <a id="manualBtn" href="#" class="btn">เปิดแอป GPower</a>
+      </div>
     </div>
 
     <script>
-      (function () {
+      (function() {
+        console.log('[GPower] Page loaded');
+        
         const params = new URLSearchParams(window.location.search);
-        const redirectParam = params.get("redirect");
-
-        console.log("[DeepLink] Query params:", window.location.search);
-        console.log("[DeepLink] Redirect param:", redirectParam);
-
+        const redirectParam = params.get('redirect');
+        
+        console.log('[GPower] Redirect param:', redirectParam);
+        
         if (redirectParam) {
           const decoded = decodeURIComponent(redirectParam);
-          console.log("[DeepLink] Decoded URL:", decoded);
-
-          // Set manual fallback link
-          document.getElementById("manualLink").href = decoded;
-
-          // Try multiple redirect methods for better compatibility
-          try {
-            // Method 1: Direct assignment (most reliable for deep links)
-            window.location.href = decoded;
-            console.log("[DeepLink] Attempted redirect with location.href");
-          } catch (e) {
-            console.error("[DeepLink] Error with location.href:", e);
-            
-            // Method 2: Try window.open as fallback
-            try {
-              window.open(decoded, '_self');
-              console.log("[DeepLink] Attempted redirect with window.open");
-            } catch (e2) {
-              console.error("[DeepLink] Error with window.open:", e2);
-            }
-          }
-
-          // Show fallback after 2 seconds if redirect doesn't work
-          setTimeout(() => {
-            console.log("[DeepLink] Showing fallback button");
-            document.getElementById("fallback").style.display = "block";
-          }, 2000);
-
+          console.log('[GPower] Decoded URL:', decoded);
+          
+          // Set fallback button
+          document.getElementById('manualBtn').href = decoded;
+          
+          // Try redirect immediately
+          console.log('[GPower] Attempting window.location.href redirect');
+          window.location.href = decoded;
+          
+          // Backup method
+          setTimeout(function() {
+            console.log('[GPower] Attempting window.open redirect');
+            window.open(decoded, '_self');
+          }, 100);
+          
+          // Show fallback after 1 second
+          setTimeout(function() {
+            console.log('[GPower] Showing fallback button');
+            document.getElementById('fallback').style.display = 'block';
+          }, 1000);
+          
         } else {
-          console.log("[DeepLink] No redirect parameter found");
-          document.getElementById("fallback").innerHTML =
-            "ไม่พบลิงก์สำหรับเปิดแอป";
-          document.getElementById("fallback").style.display = "block";
+          console.log('[GPower] No redirect parameter found');
+          document.getElementById('fallback').style.display = 'block';
+          document.querySelector('.fallback-text').textContent = 'ไม่พบลิงก์สำหรับเปิดแอป';
         }
       })();
     </script>
