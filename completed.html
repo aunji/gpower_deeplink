@@ -1,25 +1,36 @@
-<!-- completed.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>Redirecting...</title>
+    <title>กำลังกลับเข้าแอป GPower...</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       window.onload = function () {
-        const redirect = new URLSearchParams(window.location.search).get(
-          "redirect"
-        );
+        const params = new URLSearchParams(window.location.search);
+        const redirect = params.get("redirect");
         if (redirect) {
           const decoded = decodeURIComponent(redirect);
-          console.log("Redirecting to app:", decoded);
           window.location.href = decoded;
+
+          setTimeout(() => {
+            document.getElementById("fallback").style.display = "block";
+            document.getElementById("manualLink").href = decoded;
+          }, 3000);
         } else {
-          document.body.innerHTML = "<h2>No redirect URL found.</h2>";
+          document.getElementById("fallback").innerHTML =
+            "ไม่พบลิงก์ redirect 😢";
+          document.getElementById("fallback").style.display = "block";
         }
       };
     </script>
   </head>
   <body>
-    <h2>Redirecting to app...</h2>
+    <h1>กำลังเปิดแอป GPower...</h1>
+    <p>กรุณารอสักครู่ เพื่อกลับเข้าสู่แอป</p>
+
+    <div id="fallback">
+      <p>หากแอปไม่เปิดอัตโนมัติ<br />กรุณากดปุ่มด้านล่าง</p>
+      <a id="manualLink" class="button" href="#">เปิดแอป</a>
+    </div>
   </body>
 </html>
