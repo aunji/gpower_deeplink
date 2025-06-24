@@ -6,25 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script>
       window.onload = function () {
-        const params = new URLSearchParams(window.location.search);
-        const redirect = params.get("redirect");
+        const redirectParam = new URLSearchParams(window.location.search).get(
+          "redirect"
+        );
 
-        if (redirect) {
-          const decoded = decodeURIComponent(redirect);
-          console.log("[Redirect]:", decoded);
-          document.getElementById("manualLink").href = decoded;
+        if (redirectParam) {
+          try {
+            const decoded = decodeURIComponent(redirectParam);
+            console.log("[Redirecting to App]:", decoded);
 
-          // Auto redirect
-          setTimeout(() => {
+            // Set manual fallback link
+            const manualLink = document.getElementById("manualLink");
+            manualLink.href = decoded;
+
+            // Auto-redirect
             window.location.href = decoded;
-          }, 300);
 
-          // Fallback UI after delay
-          setTimeout(() => {
+            // Show fallback if it doesn't redirect in 3 seconds
+            setTimeout(() => {
+              document.getElementById("fallback").style.display = "block";
+            }, 3000);
+          } catch (e) {
+            console.warn("Error decoding deep link:", e);
+            document.getElementById("fallback").innerText =
+              "เกิดข้อผิดพลาดในการเปิดแอป";
             document.getElementById("fallback").style.display = "block";
-          }, 3000);
+          }
         } else {
-          document.getElementById("fallback").innerHTML =
+          document.getElementById("fallback").innerText =
             "ไม่พบลิงก์สำหรับเปิดแอป";
           document.getElementById("fallback").style.display = "block";
         }
@@ -45,8 +54,9 @@
         display: none;
         margin-top: 40px;
       }
-      a#manualLink {
+      #manualLink {
         display: inline-block;
+        margin-top: 12px;
         padding: 12px 24px;
         background-color: #1e88e5;
         color: white;
@@ -61,7 +71,7 @@
     <p>กรุณารอสักครู่</p>
 
     <div id="fallback">
-      <p>หากแอปไม่เปิดอัตโนมัติ<br />กรุณากดปุ่มด้านล่าง:</p>
+      <p>หากแอปไม่เปิดอัตโนมัติ กรุณากดปุ่มด้านล่าง:</p>
       <a id="manualLink" href="#">เปิดแอปด้วยตนเอง</a>
     </div>
   </body>
