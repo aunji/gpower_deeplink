@@ -2,7 +2,7 @@
 <html lang="th">
   <head>
     <meta charset="UTF-8" />
-    <title>กำลังกลับเข้าแอป GPower...</title>
+    <title>กำลังเปิดแอป GPower...</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       body {
@@ -30,23 +30,28 @@
       window.onload = function () {
         const params = new URLSearchParams(window.location.search);
         const redirect = params.get("redirect");
-        if (redirect) {
-          const decoded = decodeURIComponent(redirect);
-          console.log("[🧭 Redirecting to app]:", decoded);
 
-          // ลองเปิดลิงก์ deep link ทันที
-          window.location.href = decoded;
-
-          // ถ้าไม่สำเร็จใน 3 วิ แสดง fallback
-          setTimeout(() => {
-            document.getElementById("fallback").style.display = "block";
-            document.getElementById("manualLink").href = decoded;
-          }, 3000);
-        } else {
+        if (!redirect) {
           document.getElementById("fallback").innerHTML =
-            "ไม่พบลิงก์ redirect 😢";
+            "ไม่พบลิงก์สำหรับเปิดแอป";
           document.getElementById("fallback").style.display = "block";
+          return;
         }
+
+        const decoded = decodeURIComponent(redirect);
+        console.log("[DeepLink] Try opening:", decoded);
+
+        // วิธี 1: ลอง iframe (ดีสุดบน Android)
+        const iframe = document.createElement("iframe");
+        iframe.style.display = "none";
+        iframe.src = decoded;
+        document.body.appendChild(iframe);
+
+        // วิธี 2: iOS อาจต้องใช้ fallback
+        setTimeout(() => {
+          document.getElementById("fallback").style.display = "block";
+          document.getElementById("manualLink").href = decoded;
+        }, 2000);
       };
     </script>
   </head>
@@ -56,7 +61,8 @@
 
     <div id="fallback">
       <p>
-        หากแอปไม่เปิดอัตโนมัติ<br />กรุณากดปุ่มด้านล่างเพื่อเปิดแอปด้วยตนเอง
+        หากแอปไม่เปิดอัตโนมัติ<br />
+        กรุณากดปุ่มด้านล่างเพื่อเปิดแอปด้วยตนเอง
       </p>
       <a id="manualLink" class="button" href="#">เปิดแอป GPower</a>
     </div>
